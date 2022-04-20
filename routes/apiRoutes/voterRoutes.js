@@ -1,10 +1,9 @@
 const express = require('express');
-const { appendFile } = require('fs');
 const router = express.Router();
 const db = require('../../db/connection');
 const inputCheck = require('../../utils/inputCheck');
 
-// GET all voters
+// Get all voters alphabetized by last name
 router.get('/voters', (req, res) => {
   const sql = `SELECT * FROM voters ORDER BY last_name`;
 
@@ -20,7 +19,7 @@ router.get('/voters', (req, res) => {
   });
 });
 
-// GET individual voter
+// Get single voter
 router.get('/voter/:id', (req, res) => {
   const sql = `SELECT * FROM voters WHERE id = ?`;
   const params = [req.params.id];
@@ -37,9 +36,9 @@ router.get('/voter/:id', (req, res) => {
   });
 });
 
-// POST voter input
+// Create a voter
 router.post('/voter', ({ body }, res) => {
-  //data validation
+  // Data validation
   const errors = inputCheck(body, 'first_name', 'last_name', 'email');
   if (errors) {
     res.status(400).json({ error: errors });
@@ -61,9 +60,9 @@ router.post('/voter', ({ body }, res) => {
   });
 });
 
-// UPDATE voter email
+// Update a voter's email
 router.put('/voter/:id', (req, res) => {
-  // data validation
+  // Data validation
   const errors = inputCheck(req.body, 'email');
   if (errors) {
     res.status(400).json({ error: errors });
@@ -90,7 +89,7 @@ router.put('/voter/:id', (req, res) => {
   });
 });
 
-// DELETE voter
+// Delete a voter
 router.delete('/voter/:id', (req, res) => {
   const sql = `DELETE FROM voters WHERE id = ?`;
 
